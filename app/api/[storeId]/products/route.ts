@@ -98,6 +98,7 @@ export async function GET(
     if (!params.storeId) {
       return new NextResponse("Store id is required", { status: 400 });
     }
+    // return NextResponse.json({msg:'get all products'});
 
     const products = await prismadb.product.findMany({
       where: {
@@ -106,7 +107,8 @@ export async function GET(
         colorId,
         sizeId,
         isFeatured: isFeatured ? true : undefined,
-        isArchived: false,
+        // 是否存档，没存档就请求不到
+        isArchived: true,
       },
       include: {
         images: true,
@@ -118,6 +120,7 @@ export async function GET(
         createdAt: 'desc',
       }
     });
+    
   
     return NextResponse.json(products);
   } catch (error) {
